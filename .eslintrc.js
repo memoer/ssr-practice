@@ -1,5 +1,3 @@
-const path = require('path');
-
 module.exports = {
   env: {
     browser: true,
@@ -8,8 +6,8 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
+    'plugin:react/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
-    'plugin:prettier/recommended',
   ],
   globals: {
     Atomics: 'readonly',
@@ -17,15 +15,22 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    ecmaFeatures: {
+      jsx: true,
+    },
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint'],
-  rules: {},
+  plugins: ['react', '@typescript-eslint'],
+  rules: {
+    'react/jsx-filename-extension': [1, { extensions: ['tsx'] }],
+  },
   settings: {
-    'import/resolver': {
-      // 절대경로를 src로 잡아줄 경우, eslint에서 오류가 발생하지 않도록
-      node: { paths: [path.resolve('./src/server')] },
+    react: {
+      createClass: 'createReactClass', // Regex for Component Factory to use,
+      // default to "createReactClass"
+      pragma: 'React', // Pragma to use, default to "React"
+      version: 'detect', // React version. "detect" automatically picks the version you have installed.
     },
   },
 };

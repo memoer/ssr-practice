@@ -17,9 +17,10 @@
     "allowJs": true /* Allow javascript files to be compiled. */,
     "checkJs": true /* Report errors in .js files. */,
     "sourceMap": true /* Generates corresponding '.map' file. */,
-    "outDir": "./build" /* Redirect output structure to the directory. */,
-    "rootDir": "./src/server" /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
+    "outDir": "./build/server" /* Redirect output structure to the directory. */,
+    "rootDir": "./src" /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */,
     "removeComments": true /* Do not emit comments to output. */,
+    "jsx": "react",
     // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
 
     /* Strict Type-Checking Options */
@@ -36,7 +37,7 @@
     // https://vomvoru.github.io/blog/typescript-module-resolution/
     // import, export
     "moduleResolution": "node",
-    "baseUrl": "./src/server" /* Base directory to resolve non-absolute module names. */,
+    "baseUrl": "./src" /* Base directory to resolve non-absolute module names. */,
     "allowSyntheticDefaultImports": true /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */,
     // es6모듈을 사용하여 CommonJS 모듈을 가져올 수 있음
     // import * as React from "react" -> import React from "react"
@@ -47,19 +48,19 @@
     // 파일명에 대소문자 구분하지 않아도 되는 기능 사용 여부
     "forceConsistentCasingInFileNames": true,
     // json 을 import 할 수 있게
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
 
     // *.d.ts 파일들의 타입 체크 skip
     // "skipLibCheck": true,
     // 각각의 .ts파일들은 반드시 export를 해주어야 함
     // All files must be modules when the '--isolatedModules' flag is provided.
     // "isolatedModules": true,
-    // "paths": {
-    //   "~src/*": ["*"],
-    //   "~lib/*": ["lib/*"]
-    // }
+    "paths": {
+      "~server/*": ["server/*"],
+      "~client/*": ["client/*"]
+    }
   },
-  "exclude": ["node_modules", "build"],
-  "include": ["src/server/**/*"]
+  "exclude": ["node_modules", "build", "src/public"],
+  "include": ["src"]
   // "files": ["global.d.ts"],
 }
