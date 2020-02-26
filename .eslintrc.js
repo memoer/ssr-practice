@@ -7,7 +7,10 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
-    'plugin:@typescript-eslint/eslint-recommended',
+    // 잘못된 사용법
+    // 'plugin:@typescript-eslint/eslint-recommended',
+    // 올바른 사용법
+    'plugin:@typescript-eslint/recommended',
   ],
   globals: {
     Atomics: 'readonly',

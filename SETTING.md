@@ -1,4 +1,4 @@
-```code
+```shell
 npm i express react react-dom
 
 npm i @types/express @types/react @types/react-dom typescript prettier -D
@@ -11,5 +11,9 @@ npx eslint --init
 ? Where does your code run? Browser, Node
 ? What format do you want your config file to be in? JavaScript
 
-npm i webpack webpack-cli @types/node @types/webpack -D
+# for webpack
+npm i webpack webpack-cli -D
+
+# for compile tsx using bable-loader
+npm i babel-loader @babel/core @babel/preset-env @babel/preset-react @babel/preset-typescript -D
 ```

@@ -4,7 +4,7 @@
     // ts -> js 컴파일 시 js 버전 설정
     // es5 : () => null -> function(){return null;}
     // es6 : () => null -> () => null
-    "target": "es5",
+    "target": "ES5",
     // lib 항목을 정의하지 않는다면 target항목에서 지정한 ECMAScript의 버전에 따라 기본값이 정의됨
     // ES5 : dom, es5, scripthost
     // ES6 : dom, dom.iterable, es6, scripthost

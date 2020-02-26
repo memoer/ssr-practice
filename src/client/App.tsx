@@ -1,5 +1,5 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const App: React.FC = (): JSX.Element => <div>test App</div>;
+const App: FC = (): JSX.Element => <div>test App</div>;
 
 export default App;
