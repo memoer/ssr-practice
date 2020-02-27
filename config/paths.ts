@@ -3,8 +3,11 @@ const resolveApp = (relativePath: string): string => path.resolve(__dirname, '..
 
 export default {
   dotenv: resolveApp('.env'),
-  appClient: resolveApp('src/client'),
-  appClientBuild: resolveApp('build/client'),
-  appClientIndex: resolveApp('src/client/index.tsx'),
+  appHtml: resolveApp('public/index.html'),
+  appPath: (type: 'client' | 'server'): string => resolveApp(`src/${type}`),
+  appIndex: (type: 'client' | 'server'): string =>
+    resolveApp(type === 'client' ? 'src/client/index.tsx' : 'src/server/index.ts'),
+  appBuild: (type: 'client' | 'server'): string => resolveApp(`build/${type}`),
   appNodeModules: resolveApp('node_modules'),
+  appPublicPath: '/',
 };

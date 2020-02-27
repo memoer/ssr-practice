@@ -1,20 +1,29 @@
 import webpack from 'webpack';
 import nodeExternals from 'webpack-node-externals';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import paths from './paths';
-import { Env } from './webpack.d';
+import { Env } from './types/webpack';
+
+const TYPE = 'server';
 
 const config = (env: Env): webpack.Configuration => {
   const isProd = env === 'production';
 
   return {
+    target: 'node',
     mode: isProd ? 'production' : 'development',
-    entry: paths.appClientIndex,
+    entry: paths.appIndex(TYPE),
+    plugins: [new CleanWebpackPlugin()],
     module: {
       rules: [
         {
-          test: /\.(ts|tsx)$/,
-          loader: 'babel-loader',
-          exclude: paths.appNodeModules,
+          oneOf: [
+            {
+              test: /\.(ts|tsx)$/,
+              loader: 'babel-loader',
+              exclude: paths.appNodeModules,
+            },
+          ],
         },
       ],
     },
@@ -22,12 +31,12 @@ const config = (env: Env): webpack.Configuration => {
       enforceExtension: false,
       extensions: ['.tsx', '.ts'],
       alias: {
-        '~client': paths.appClient,
+        '~server': paths.appPath(TYPE),
       },
     },
     output: {
-      filename: 'main.js',
-      path: paths.appClientBuild,
+      filename: 'render.js',
+      path: paths.appBuild(TYPE),
     },
     externals: [nodeExternals()],
   };
