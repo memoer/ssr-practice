@@ -19,12 +19,6 @@ const config = (env: Env): webpack.Configuration => {
       ],
     },
     resolve: {
-      /**
-       * If true, it will not allow extension-less files.
-       *   -> enabled only require('./foo.js') will work.
-       * if false ( default )
-       *   -> So by default require('./foo') works if ./foo has a .js extension
-       */
       enforceExtension: false,
       extensions: ['.tsx', '.ts'],
       alias: {
