@@ -2,11 +2,10 @@ import webpack from 'webpack';
 import nodeExternals from 'webpack-node-externals';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import paths from './paths';
-import { Env } from './types/webpack';
 
 const TYPE = 'server';
 
-const config = (env: Env): webpack.Configuration => {
+const config = (env: 'development' | 'production'): webpack.Configuration => {
   const isProd = env === 'production';
 
   return {

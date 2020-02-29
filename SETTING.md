@@ -1,7 +1,7 @@
 ```shell
 npm install express react react-dom
 
-npm install --save-dev @types/express @types/react @types/react-dom typescript prettier
+npm install --save-dev @types/express @types/react @types/react-dom typescript prettier dotenv webpack-node-externals @types/node
 
 npx eslint --init
 ? How would you like to use ESLint? To check syntax and find problems
@@ -14,29 +14,34 @@ npx eslint --init
 # for webpack
 npm install --save-dev webpack webpack-cli
 
-# for using typescript webpack config
-npm install --save-dev ts-node @types/node @types/webpack
-
 # for using webpack-dev-server
-npm install --save-dev @types/webpack-dev-server
+npm install --save-dev  webpack-dev-server
 
-# for compile tsx using bable-loader
+# to compile tsx using bable-loader
 npm install --save-dev babel-loader @babel/core @babel/preset-env @babel/preset-react @babel/preset-typescript
 
-# for import css file
-npm install --save-dev style-loader css-loader
+# to import css file
+npm install --save-dev style-loader css-loader sass-loader
 
-# for import image
+# to import image
 npm install --save-dev file-loader
 
 # to generates an `index.html` file with the <script> injected.
 npm install --save-dev html-webpack-plugin
-npm install s/html-webpack-plugin -D
 
-# for clean build/client file
+# to clean build/client file
 npm install --save-dev clean-webpack-plugin
 
-# for generate manifest file
+# to generate manifest file
 npm install --save-dev webpack-manifest-plugin
-npm install @types/webpack-manifest-plugin -D
+
+# to generate css files when production env
+npm install --save-dev mini-css-extract-plugin
+
+# to optimize
+npm --save-dev i terser-webpack-plugin optimize-css-assets-webpack-plugin  postcss-safe-parser
+
+# scripts
+npm install --save-dev react-dev-utils
+
 ```
