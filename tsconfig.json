@@ -23,7 +23,7 @@
       "~client/*": ["src/client/*"]
     }
   },
-  "include": ["src", "config"],
-  "exclude": ["build", "node_modules", "public", "config/env.js", "config/paths.js"],
+  "include": ["src"],
+  "exclude": ["build", "node_modules", "public"],
   "files": ["global.d.ts"]
 }

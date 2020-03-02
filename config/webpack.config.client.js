@@ -1,31 +1,25 @@
-import webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import ManifestPlugin from 'webpack-manifest-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
-import TerserPlugin from 'terser-webpack-plugin';
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
-import safePostCssParser from 'postcss-safe-parser';
-import paths from './paths';
-import devServerConfig from './webpackDevServer.config';
-import getEnv from './env';
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+// const safePostCssParser = require('postcss-safe-parser');
+const paths = require('./paths');
+const getEnv = require('./env');
 
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
-const TYPE = 'client';
 const TS_REGEX = /\.(ts|tsx)$/;
 const CSS_REGEX = /\.css$/;
 const SASS_REGEX = /\.(scss|sass)$/;
 
-const config = webpackEnv => {
+module.exports = webpackEnv => {
   const isProd = webpackEnv === 'production';
   const env = getEnv(paths.publicPath);
   const getStyleLoaders = (importLoaders, preProcessor) => {
     const loaders = [
-      isProd
-        ? {
-            loader: MiniCssExtractPlugin.loader,
-          }
-        : 'style-loader',
+      isProd ? { loader: MiniCssExtractPlugin.loader } : 'style-loader',
       {
         loader: 'css-loader',
         options: {
@@ -37,19 +31,21 @@ const config = webpackEnv => {
     if (preProcessor) {
       loaders.push({
         loader: preProcessor,
-        options: { sourceMap: true },
+        options: {
+          sourceMap: true,
+        },
       });
     }
     return loaders;
   };
-  const config: webpack.Configuration = {
+  return {
     target: 'web',
     mode: webpackEnv,
     bail: isProd,
     devtool: isProd ? (shouldUseSourceMap ? 'source-map' : false) : 'cheap-module-source-map',
-    entry: paths.appIndex(TYPE),
+    entry: paths.appClientIndex,
     output: {
-      path: paths.appBuild(TYPE),
+      path: paths.appClientBuild,
       pathinfo: !isProd,
       filename: isProd ? 'static/js/[name].[contenthash:8].js' : 'static/js/bundle.js',
       publicPath: paths.publicPath,
@@ -76,7 +72,7 @@ const config = webpackEnv => {
         }),
         new OptimizeCSSAssetsPlugin({
           cssProcessorOptions: {
-            parser: safePostCssParser,
+            // parser: safePostCssParser,
             map: shouldUseSourceMap
               ? {
                   inline: false,
@@ -174,7 +170,7 @@ const config = webpackEnv => {
         fileName: 'asset-manifest.json',
         publicPath: paths.publicPath,
       }),
-    ],
+    ].filter(Boolean),
     node: {
       module: 'empty',
       dgram: 'empty',
@@ -183,16 +179,7 @@ const config = webpackEnv => {
       http2: 'empty',
       net: 'empty',
       tls: 'empty',
-      // eslint-disable-next-line @typescript-eslint/camelcase
       child_process: 'empty',
     },
-    externals: {
-      react: 'React',
-      'react-dom': 'ReactDOM',
-    },
   };
-  if (!isProd) return Object.assign(devServerConfig, config);
-  return config;
 };
-
-export default config;

@@ -1,44 +1,35 @@
-import webpack from 'webpack';
-import nodeExternals from 'webpack-node-externals';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-import paths from './paths';
+const nodeExternals = require('webpack-node-externals');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const paths = require('./paths');
 
-const TYPE = 'server';
-
-const config = (env: 'development' | 'production'): webpack.Configuration => {
-  const isProd = env === 'production';
-
-  return {
-    target: 'node',
-    mode: isProd ? 'production' : 'development',
-    entry: paths.appIndex(TYPE),
-    plugins: [new CleanWebpackPlugin()],
-    module: {
-      rules: [
-        {
-          oneOf: [
-            {
-              test: /\.(ts|tsx)$/,
-              loader: 'babel-loader',
-              exclude: paths.appNodeModules,
-            },
-          ],
-        },
-      ],
-    },
-    resolve: {
-      enforceExtension: false,
-      extensions: ['.tsx', '.ts'],
-      alias: {
-        '~server': paths.appPath(TYPE),
+module.exports = env => ({
+  target: 'node',
+  mode: env,
+  entry: paths.appServerIndex,
+  plugins: [new CleanWebpackPlugin()],
+  module: {
+    rules: [
+      {
+        oneOf: [
+          {
+            test: /\.(ts|tsx)$/,
+            loader: 'babel-loader',
+            exclude: paths.appNodeModules,
+          },
+        ],
       },
+    ],
+  },
+  resolve: {
+    enforceExtension: false,
+    extensions: ['.tsx', '.ts'],
+    alias: {
+      '~server': paths.appServer,
     },
-    output: {
-      filename: 'render.js',
-      path: paths.appBuild(TYPE),
-    },
-    externals: [nodeExternals()],
-  };
-};
-
-export default config;
+  },
+  output: {
+    filename: 'render.js',
+    path: paths.appServerBuild,
+  },
+  externals: [nodeExternals()],
+});
