@@ -15,4 +15,5 @@
 
 to-do-next
 
-- start analysis -> scripts/start : prepareProxy
+- start analysis webpack dev server quiet 
+- find default value -> process.env.WDS_SOCKET_[HOST, PATH, PORT]

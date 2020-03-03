@@ -23,7 +23,7 @@ const { checkBrowsers } = require('react-dev-utils/browsersHelper'); // 모르�
 const {
   choosePort, // port 선택 도움 -> 3000사용하고 있을 경우, 3001 제안 -> Promise로 사용한 port 반환
   createCompiler, // webpack config 를 통해 compiler 를 생성
-  prepareUrls, // 모르겠음
+  prepareUrls,
   prepareProxy, // proxy 설정
 } = require('react-dev-utils/WebpackDevServerUtils');
 
@@ -54,27 +54,39 @@ checkBrowsers(paths.appPath, isInteractive)
     if (port == null) return;
     // package.json - name
     const appName = require(paths.appPackageJson).name;
+
     // wepback config
     const config = webpackClientConfig(process.env.NODE_ENV);
+
     // 'https' | 'http'
     const protocol = process.env.HTPPS === 'true' ? 'https' : 'http';
+
+    // host가 있으면 해당 host로 url을 설정, 없으면 0.0.0.0||::으로 설정 -> host:port
+    // terminal용 url -> 강조: chalk.bold, browser Url용 url -> 단순히 string
+    // address.ip()를 통해 get PrivmateNetworkIp
     /**
-     * return Object
-     * {
-     *  lanUrlForConfig,     // privateNetworkIp
-     *  lanUrlForTerminal,   // prettyPrintUrl(lanUrlForConfig)
-     *  localUrlForTerminal, // host ? format.url(host) : format.url('localhost')
-     *  localUrlForBrowser,  // host ? format.url(host) : format.url('localhost')
-     * }
+       {
+          lanUrlForConfig: '192.168.219.103',
+          lanUrlForTerminal: 'http://192.168.219.103:\u001b[1m3000\u001b[22m',
+          localUrlForTerminal: 'http://localhost:\u001b[1m3000\u001b[22m',
+          localUrlForBrowser: 'http://localhost:3000'
+        }
      */
     const urls = prepareUrls(protocol, HOST, port, paths.publicPath.slice(0, -1));
+
+    // yarn-lock.json 파일 경로 -> 없으면 false
     const useYarn = fs.existsSync(paths.yarnLockFile);
+
     const devSocket = {
       warnings: warnings => devServer.sockWrite(devServer.sockets, 'warnings', warnings),
       errors: errors => devServer.sockWrite(devServer.sockets, 'errors', errors),
     };
+
+    // tsconfig.json 파일 경로 -> 없으면 false
     const useTypeScript = fs.existsSync(paths.appTsConfig);
+
     const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true';
+
     const compiler = createCompiler({
       appName,
       config,
@@ -85,10 +97,38 @@ checkBrowsers(paths.appPath, isInteractive)
       useTypeScript,
       tscCompileOnError,
     });
+
     // Ex) "http://localhost:3000"
     const proxySetting = require(paths.appPackageJson).proxy;
+
     // Ex) ("http://localhost:3000", process.cwd()+"/public", "/")
+    /**
+     * return object
+      {
+        target,
+        logLevel: 'silent',
+        context: function(pathname, req) {
+          return (
+            req.method !== 'GET' ||
+            (mayProxy(pathname) &&
+              req.headers.accept &&
+              req.headers.accept.indexOf('text/html') === -1)
+          );
+        },
+        onProxyReq: proxyReq => {
+          if (proxyReq.getHeader('origin')) {
+            proxyReq.setHeader('origin', target);
+          }
+        },
+        onError: onProxyError(target),
+        secure: false,
+        changeOrigin: true,
+        ws: true,
+        xfwd: true,
+      },
+     */
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic, paths.publicPath);
+
     const devServerConfig = webpackDevServerConfig(proxyConfig, urls.lanUrlForConfig);
 
     const devServer = new WebpackDevServer(compiler, devServerConfig);
