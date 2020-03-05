@@ -21,7 +21,7 @@ npm install --save-dev  webpack-dev-server
 npm install --save-dev babel-loader @babel/core @babel/preset-env @babel/preset-react @babel/preset-typescript
 
 # to import css file
-npm install --save-dev style-loader css-loader sass-loader
+npm install --save-dev style-loader css-loader sass-loader postcss-safe-parser
 
 # to import image
 npm install --save-dev file-loader
@@ -40,6 +40,9 @@ npm install --save-dev mini-css-extract-plugin
 
 # to optimize
 npm --save-dev i terser-webpack-plugin optimize-css-assets-webpack-plugin  postcss-safe-parser
+
+# for bundle pre module - lint
+npm install --save-dev eslint-loader
 
 # scripts
 npm install --save-dev react-dev-utils

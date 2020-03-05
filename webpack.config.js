@@ -9,9 +9,6 @@ module.exports = {
   bail: false,
   entry: path.resolve(__dirname, 'src/client/index.tsx'),
   devtool: 'cheap-module-source-map',
-  devServer: {
-    port: 3000,
-  },
   resolve: {
     modules: ['node_modules'],
     enforceExtension: false,
@@ -27,6 +24,11 @@ module.exports = {
           cacheCompression: false,
           compact: false,
         },
+      },
+      {
+        test: /\.css$/,
+        loaders: ['style-loader', 'css-loader'],
+        sideEffects: true,
       },
     ],
   },

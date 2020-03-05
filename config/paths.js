@@ -13,7 +13,7 @@ const publicPath = getPublicPath(process.env.PUBLIC_URL);
 
 //
 const { paths: tsconfigPaths } = tsconfig.compilerOptions;
-const webpackPaths = Object.keys(tsconfigPaths).reduce((paths, alias) => {
+const webpackAlias = Object.keys(tsconfigPaths).reduce((paths, alias) => {
   // 경로에 /client/ 가 있을때에만
   const relativePath = tsconfigPaths[alias][0];
   const isClientPath = relativePath.includes('/client/');
@@ -41,5 +41,5 @@ module.exports = {
   yarnLockFile: resolveApp('yarn.lock'),
   appTsConfig: resolveApp('tsconfig.json'),
   publicPath,
-  webpackPaths,
+  webpackAlias,
 };

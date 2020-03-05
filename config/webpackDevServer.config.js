@@ -44,28 +44,39 @@ module.exports = function(proxy, allowedHost) {
     sockPort,
     // access browser path to bundled files
     publicPath: paths.publicPath.slice(0, -1),
+    // nothing except the initial startup information will be written to the console. -> This also means that errors or warnings from webpack are not visible.
     quiet: true,
+    // Control options related to watching the files -> 지켜볼 파일 설정하는 옵션
     watchOptions: {
       ignored: ignoredFiles(paths.appSrc),
     },
     host,
+    // Shows a full-screen overlay in the browser when there are compiler errors or warnings.
+    // overlay:{
+    //   warnings:true,
+    //   errors:true
+    // }
     overlay: false,
-    // historyApiFallback: {
-    // disableDotRule: true,
-    // index: paths.publicUrlOrPath,
-    // },
-    // public: allowedHost,
+    // When using the HTML5 History API, the index.html page will likely have to be served in place of any 404 responses.
+    historyApiFallback: {
+      disableDotRule: true,
+      index: paths.publicPath,
+    },
+    public: allowedHost,
     proxy,
-    // before(app, server) {
-    //   app.use(evalSourceMapMiddleware(server));
-    //   app.use(errorOverlayMiddleware());
-    //   if (fs.existsSync(paths.proxySetup)) {
-    //     require(paths.proxySetup)(app);
-    //   }
-    // },
-    // after(app) {
-    //   app.use(redirectServedPath(paths.publicUrlOrPath));
-    //   app.use(noopServiceWorkerMiddleware(paths.publicUrlOrPath));
-    // },
+    before(app, server) {
+      // This lets us fetch source contents from webpack for the error overlay
+      app.use(evalSourceMapMiddleware(server));
+      // This lets us open files from the runtime error overlay.
+      app.use(errorOverlayMiddleware());
+      if (fs.existsSync(paths.proxySetup)) {
+        require(paths.proxySetup)(app);
+      }
+    },
+    after(app) {
+      // Redirect to `PUBLIC_URL` if url not match
+      app.use(redirectServedPath(paths.publicUrlOrPath));
+      app.use(noopServiceWorkerMiddleware(paths.publicUrlOrPath));
+    },
   };
 };

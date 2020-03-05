@@ -13,7 +13,12 @@
 
 ---
 
-to-do-next
+- client dev 셋팅 완료
+- client dev webpack 분석중
 
-- start analysis webpack dev server quiet 
-- find default value -> process.env.WDS_SOCKET_[HOST, PATH, PORT]
+## to do next
+
+### wepback
+
+- optimization.splitChunks 분석
+- cra 와 비교하며 plugins 추가 및 분석
